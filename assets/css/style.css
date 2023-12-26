@@ -224,7 +224,7 @@ h6 {
   transition: all 0.5s;
   z-index: 997;
   height: 70px;
-  top: 60px;
+  /* top: 60px; */
 }
 
 #header.header-scrolled {
