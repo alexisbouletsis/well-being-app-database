@@ -99,40 +99,40 @@
         </div>
 
         <div class="table-container">
-            <h2>Your Data Table</h2>
+            <h2>Your own biometric data </h2>
         
             <table>
               <tr>
                 <td><b>Weight</b></td>
-                <td>Replace with weight data</td>
+                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
               </tr>
               <tr>
                 <td><b>Height</b></td>
-                <td>Replace with height data</td>
-              </tr>
+                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
               <tr>
                 <td><b>Body Fat Percentage</b></td>
-                <td>Replace with body fat percentage data</td>
+                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
               </tr>
               <tr>
                 <td><b>Muscle Percentage</b></td>
-                <td>52</td>
+                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
               </tr>
               <tr>
                 <td><b>Fluid Percentage</b></td>
-                <td>Replace with fluid percentage data</td>
+                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
               </tr>
               <tr>
                 <td><b>Bone Percentage</b></td>
-                <td>Replace with bone percentage data</td>
+                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
+
               </tr>
               <tr>
                 <td><b>Measurement Date</b></td>
-                <td>Replace with measurement date data</td>
+                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
               </tr>
               <tr>
                 <td><b>Customer Username</b></td>
-                <td>Replace with customer username data</td>
+                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
               </tr>
             </table>
           </div>
@@ -144,7 +144,7 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
- <footer id="footer">  </div>
+ <footer id="footer" style="position: fixed; width: 100%; bottom: 0;">  </div>
     <div class="container text-center">
         <div class="copyright">
         &copy; Copyright <strong><span>Well-being App</span></strong>. All Rights Reserved
@@ -175,6 +175,19 @@
   <script src="assets/js/main.js"></script>
 <!-- Font Awesome CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
+<script>
+  function toggleEditable(icon) {
+    var td = icon.parentElement;
+    var contentEditable = td.querySelector('[contenteditable="true"]');
+    contentEditable.focus();
+  }
+
+  function updateData(button) {
+      var contentEditable = button.parentElement.querySelector('[contenteditable="true"]');
+      // Add logic to update the data (e.g., send to server, update local storage, etc.)
+      alert("Data Updated: " + contentEditable.innerText);
+    }
+</script>
 </body>
 
 </html>
