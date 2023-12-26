@@ -9,6 +9,56 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+.login-box {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  width: 500px;
+  margin: 0 auto; /* Centers the box horizontally */
+  background-color: #f9f9f9;
+}
+
+/* Adding space between form elements */
+.login-box .form-group {
+  margin-bottom: 15px; /* Adjust as needed */
+}
+
+.login-box label {
+  margin-bottom: 5px; /* Adjust as needed */
+}
+
+.signup-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 30px;
+  max-width: 700px; /* Adjust the maximum width of the signup box */
+  margin: 0 auto; /* Centers the signup box horizontally */
+  background-color: #f9f9f9;
+  font-size: 16px;
+}
+
+.signup-box .form-group {
+  margin-bottom: 20px;
+}
+
+.signup-box label {
+  margin-bottom: 8px;
+}
+
+.signup-box input[type="text"],
+.signup-box input[type="password"],
+.signup-box input[type="email"],
+.signup-box input[type="date"],
+.signup-box select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.signup-box button {
+  margin-top: 15px;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
   color: #444444;
