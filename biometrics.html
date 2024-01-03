@@ -1,3 +1,41 @@
+<?php
+// Include the database connection file
+include 'db_connection.php';
+
+// Function to fetch data from the biometrics table for a specific user
+function fetchBiometricsDataForUser($conn, $username) {
+    $sql = "SELECT * FROM biometrics WHERE customer_username = '$username'";
+    $result = $conn->query($sql);
+    return $result;
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve data from the form
+    $weight = $_POST["weight"];
+    $height = $_POST["height"];
+    $body_fat_percentage = $_POST["body_fat_percentage"];
+    $muscle_percentage = $_POST["muscle_percentage"];
+    $fluid_percentage = $_POST["fluid_percentage"];
+    $bone_percentage = $_POST["bone_percentage"];
+    $measurement_date = $_POST["measurement_date"];
+    $customer_username = $_POST["customer_username"];
+
+    // Insert data into the medication table
+    $insert_sql = "INSERT INTO biometrics ( weight, height, body_fat_percentage, muscle_percentage, fluid_percentage,bone_percentage,measurement_date,customer_username)
+                   VALUES ('$weight', '$height', '$body_fat_percentage', '$muscle_percentage', '$fluid_percentage','$bone_percentage','$measurement_date','$customer_username')";
+    if ($conn->query($insert_sql) === TRUE) {
+        // Fetch updated data after insertion
+        $result = fetchBiometricsDataForUser($conn,$username);
+    } 
+} else {
+    // Fetch data for a specific user (replace 'sample_user' with the actual username)
+    $username = 'paris2';
+    $result = fetchBiometricsDataForUser($conn, $username);
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,7 +95,7 @@
   ======================================================== -->
 </head>
 
-<body>
+<body style="background-color: #1B72BD; min-height: 100vh;">
 
   <!-- ======= Header ======= -->
   <header id="header1" class="fixed-top d-flex align-items-center ">
@@ -69,7 +107,7 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="index.html">Home</a></li>
           <li><a  href="#services">Services</a></li>
           <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
@@ -77,8 +115,8 @@
               <li><a href="#">Diet Plan</a></li>
             </ul>
           </li>
-          <li><a href="medication.html">Medication</a></li>
-          <li><a class="nav-link active" href="biometrics.html">Biometrics</a></li>
+          <li><a href="medication.php">Medication</a></li>
+          <li><a class="nav-link active" href="biometrics.php">Biometrics</a></li>
           <li><a href="index.html">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
@@ -98,44 +136,59 @@
           <h2>Biometrics</h2>
         </div>
 
-        <div class="table-container">
-            <h2>Your own biometric data </h2>
-        
-            <table>
-              <tr>
-                <td><b>Weight</b></td>
-                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
-              </tr>
-              <tr>
-                <td><b>Height</b></td>
-                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
-              <tr>
-                <td><b>Body Fat Percentage</b></td>
-                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
-              </tr>
-              <tr>
-                <td><b>Muscle Percentage</b></td>
-                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
-              </tr>
-              <tr>
-                <td><b>Fluid Percentage</b></td>
-                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
-              </tr>
-              <tr>
-                <td><b>Bone Percentage</b></td>
-                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
-
-              </tr>
-              <tr>
-                <td><b>Measurement Date</b></td>
-                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
-              </tr>
-              <tr>
-                <td><b>Customer Username</b></td>
-                <td contenteditable="true">Replace with weight data <span class="update-button" onclick="updateData(this)">✔</span><span class="edit-icon" onclick="toggleEditable(this)">&#9998;</span></td></tr>
-              </tr>
+            <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Customer Username</th>
+                <th>Weight</th> 
+                <th>Height</th>
+                <th>Body Fat Percentage</th>
+                <th>Muscle Percentage</th>
+                <th>Fluid Percentage</th>
+                <th>Bone Percentage</th>
+                <th>Measurement Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            // Display data in the table
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                echo "<tr>
+                        <td>" . $row["customer_username"] . "</td>
+                        <td>" . $row["weight"] . "</td>
+                        <td>" . $row["height"] . "</td>
+                        <td>" . $row["body_fat_percentage"] . "</td>
+                        <td>" . $row["muscle_percentage"] . "</td>
+                        <td>" . $row["fluid_percentage"] . "</td>
+                        <td>" . $row["bone_percentage"] . "</td>
+                        <td>" . $row["measurement_date"] . "</td>
+                        <td>
+                            <i class='bi bi-pencil pencil-icon action-icon' onclick='editRow(this)'></i>
+                        </td>
+                      </tr>
+                      <tr class='edit-row' style='display:none;'>
+                      <td contenteditable='true'>" . $row["customer_username"] . "</td>
+                      <td contenteditable='true'>" . $row["weight"] . "</td>
+                      <td contenteditable='true'>" . $row["height"] . "</td>
+                      <td contenteditable='true'>" . $row["body_fat_percentage"] . "</td>
+                      <td contenteditable='true'>" . $row["muscle_percentage"] . "</td>
+                      <td contenteditable='true'>" . $row["fluid_percentage"] . "</td>
+                      <td contenteditable='true'>" . $row["bone_percentage"] . "</td>
+                      <td contenteditable='true'>" . $row["measurement_date"] . "</td>
+                      <td>
+                          <i class='bi bi-check check-icon action-icon' onclick='saveEdit(this)'></i>
+                          <i class='bi bi-x close-icon action-icon' onclick='cancelEdit(this)'></i>
+                      </td>
+                    </tr>";  
+                }
+            } else {
+                echo "<tr><td colspan='3'>No data found</td></tr>";
+            }
+            ?>
+            </tbody>
             </table>
-          </div>
 
 
       </div>
@@ -149,15 +202,12 @@
         <div class="copyright">
         &copy; Copyright <strong><span>Well-being App</span></strong>. All Rights Reserved
         </div>
-        <div class="contact-info">
-          <i class="bi bi-envelope-fill"></i><a href="mailto:info@wellbeing.com">info@wellbeing.com</a>
-          <i class="bi bi-phone-fill phone-icon"></i> +1 5589 55488 55
-      </div>
         <div class="credits">
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/anyar-free-multipurpose-one-page-bootstrap-theme/ -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
         </div>
     </div>
 </footer><!-- End Footer -->
@@ -179,16 +229,33 @@
 <!-- Font Awesome CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
 <script>
-  function toggleEditable(icon) {
-    var td = icon.parentElement;
-    var contentEditable = td.querySelector('[contenteditable="true"]');
-    contentEditable.focus();
-  }
+    function editRow(button) {
+        var row = button.closest('tr');
+        var editRow = row.nextElementSibling;
+        row.style.display = 'none';
+        editRow.style.display = 'table-row';
+    }
 
-  function updateData(button) {
-      var contentEditable = button.parentElement.querySelector('[contenteditable="true"]');
-      // Add logic to update the data (e.g., send to server, update local storage, etc.)
-      alert("Data Updated: " + contentEditable.innerText);
+    function saveEdit(button) {
+        var editRow = button.closest('tr');
+        var row = editRow.previousElementSibling;
+
+        // Loop through each cell in the edit row and update the corresponding cell in the view row
+        var cells = editRow.getElementsByTagName('td');
+        for (var i = 0; i < cells.length - 1; i++) { // Exclude the last cell with buttons
+            var newValue = cells[i].textContent;
+            row.getElementsByTagName('td')[i].textContent = newValue;
+        }
+
+        editRow.style.display = 'none';
+        row.style.display = 'table-row';
+    }
+
+    function cancelEdit(button) {
+        var editRow = button.closest('tr');
+        var row = editRow.previousElementSibling;
+        editRow.style.display = 'none';
+        row.style.display = 'table-row';
     }
 </script>
 </body>
