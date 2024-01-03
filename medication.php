@@ -93,9 +93,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
             </li>
             <li><a class="nav-link active" href="medication.php">Medication</a></li>
-            <li><a href="biometrics.html">Biometrics</a></li>
-            <li><a href="login.html">Log In</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="biometrics.php">Biometrics</a></li>
+            <li><a href="login.php">Log In</a></li>
+            <li><a href="signup.php">Sign Up</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->

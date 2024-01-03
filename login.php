@@ -1,3 +1,43 @@
+<?php
+// Include the database connection file
+include 'db_connection.php';
+
+// Function to fetch data from the database tables based on username, password, and login type
+function fetchLoginData($conn, $username, $password, $loginType) {
+  $result = null;
+    if ($loginType === 'customer') {
+        // Fetch data from the customer table
+        $sql = "SELECT * FROM customer WHERE username='$username' AND password='$password'";
+        $result = $conn->query($sql);
+    } elseif ($loginType === 'employee') {
+        // Fetch data from the employee table
+        $sql = "SELECT * FROM employee WHERE username='$username' AND password='$password'";
+        $result = $conn->query($sql);
+    }
+    return $result;
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve data from the form
+    $customer_username = $_POST["username"];
+    $customer_password = $_POST["password"];
+    $login_type = $_POST["loginType"];
+
+    // Establish a database connection using $conn (make sure $conn is defined)
+
+    // Fetch login data using the fetchLoginData function
+    $login_result = fetchLoginData($conn, $customer_username, $customer_password, $login_type);
+
+    // Further actions based on $login_result (e.g., check if login was successful)
+} 
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,9 +99,9 @@
             </ul>
           </li>
           <li><a href="medication.php">Medication</a></li>
-          <li><a href="biometrics.html">Biometrics</a></li>
-          <li><a class="nav-link active" href="login.html">Log In</a></li>
-          <li><a href="signup.html">Sign Up</a></li>
+          <li><a href="biometrics.php">Biometrics</a></li>
+          <li><a class="nav-link active" href="login.php">Log In</a></li>
+          <li><a href="signup.php">Sign Up</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -75,21 +115,28 @@
 
       <!-- Slide 1 -->
       <div class="carousel-item active">
-          <div class="login-box">
+        <div class="login-box">
             <form id="loginForm" action="login.php" method="post">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
-                <!-- <button type="submit" class="btn btn-primary">Login</button> -->
-                <center><a class="btn btn-primary" href="#" role="button">Log in</a> </center>
+              <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+              </div>
+              <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+              </div>
+              <div class="form-group">
+                <label for="loginType">Login As:</label>
+                <select class="form-control" id="loginType" name="loginType">
+                  <option value="customer">Customer</option>
+                  <option value="employee">Employee</option>
+                </select>
+              </div>
+              <!-- <button type="submit" class="btn btn-primary">Login</button> -->
+              <center><a class="btn btn-primary" href="#" role="button">Log in</a> </center>
             </form>
-            <p class="text-center mt-3 text-muted">Don't have an account? <a href="signup.html">Sign up</a></p>
-        </div>
+            <p class="text-center mt-3 text-muted">Don't have an account? <a href="signup.php">Sign up</a></p>
+          </div>
       </div>
 
     </div>

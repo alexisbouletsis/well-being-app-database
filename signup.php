@@ -1,3 +1,43 @@
+<?php
+// Include the database connection file
+include 'db_connection.php';
+
+// Function to fetch data from the database tables table 
+function fetchSignupData($conn, $name, $username, $password, $email, $dob, $gender) {
+    // Prepare and execute your SQL INSERT statement here using the provided data
+    // An example:
+    $sql = "INSERT INTO customer (name, username, password, email, dob, gender) VALUES ('$name', '$username', '$password', '$email', '$dob', '$gender')";
+    $result = $conn->query($sql);
+    return $result;
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data
+    $name = $_POST['name'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $dob = $_POST['dob'];
+    $gender = $_POST['gender'];
+
+    // Use the database connection and call the function to store the data
+    $conn = yourDatabaseConnectionFunction(); // Replace with your actual database connection function
+    $result = fetchSignupData($conn, $name, $username, $password, $email, $dob, $gender);
+
+    if ($result) {
+        // Successful signup, redirect or display a success message
+        echo "Signup successful!";
+        // Redirect to another page if needed: header("Location: another_page.php");
+    } else {
+        // Signup failed, handle the error accordingly
+        echo "Signup failed!";
+    }
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,9 +99,9 @@
             </ul>
           </li>
           <li><a href="medication.php">Medication</a></li>
-          <li><a href="biometrics.html">Biometrics</a></li>
-          <li><a class="nav-link" href="login.html">Log In</a></li>
-          <li><a href="signup.html">Sign Up</a></li>
+          <li><a href="biometrics.php">Biometrics</a></li>
+          <li><a class="nav-link" href="login.php">Log In</a></li>
+          <li><a href="signup.php">Sign Up</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -128,7 +168,7 @@
                         </div>
                         <center><button type="submit" class="btn btn-primary btn-block">Sign Up</button></center>
                     </form>
-                    <p class="text-center mt-3 text-muted">Already have an account? <a href="login.html">Log in</a></p>
+                    <p class="text-center mt-3 text-muted">Already have an account? <a href="login.php">Log in</a></p>
                 </div>
             </div>
         </div>
