@@ -135,8 +135,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto" href="index.php">Home</a></li>
-          <li><a class="nav-link scrollto " href="index.php #services">Services</a></li>
+          <li><a class="nav-link " href="index.php">Home</a></li>
+          <li><a class="nav-link " href="index.php #services">Services</a></li>
           <!-- <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#">Activity Plan</a></li>
@@ -146,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <li><a href="medication.php">Medication</a></li> -->
           <!-- <li><a href="biometrics.php">Biometrics</a></li> -->
           <li><a class="nav-link" href="login.php">Log In</a></li>
-          <li><a href="signup.php">Sign Up</a></li>
+          <li><a class="nav-link active"  href="signup.php">Sign Up</a></li>
 
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>

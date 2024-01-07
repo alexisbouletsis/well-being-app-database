@@ -111,10 +111,10 @@ if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
           <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
           <li><a class="nav-link scrollto" href="#services">Services</a></li>
           <?php if (isset($_SESSION['username'])): ?>
-            <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
+            <li class="dropdown"><a href="plan.php"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
                 <ul>
-                <li><a href="#">Activity Plan</a></li>
-                <li><a href="#">Diet Plan</a></li>
+                <li><a href="plan.php">Activity Plan</a></li>
+                <li><a href="plan.php">Diet Plan</a></li>
                 </ul>
             </li>
             <li><a class="nav-link" href="medication.php">Medication</a></li>
@@ -164,6 +164,11 @@ if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
 
   <main id="main">
 
+  <section id="icon-boxes" class="icon-boxes">
+      <div class="container">
+      </div>
+    </section>End Icon Boxes Section
+
 
     <!-- ======= Services Section ======= -->
     <section id="services" class="services">
@@ -178,7 +183,7 @@ if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
             <div class="icon-box">
               <i class="bi bi-person-walking"></i>
               <?php if (isset($_SESSION['username'])): ?>
-                <h4><a href="activityplan.php">Activity Plan</a></h4>
+                <h4><a href="plan.php">Activity Plan</a></h4>
               <?php else: ?>
                 <h4>Activity Plan</h4>
               <?php endif; ?>
@@ -190,7 +195,7 @@ if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
               <i class="bi bi-cup-hot-fill"></i>
               <!-- <h4><a href="dietplan.php">Diet Plan</a></h4> -->
               <?php if (isset($_SESSION['username'])): ?>
-                <h4><a href="dietplan.php">Diet Plan</a></h4> 
+                <h4><a href="plan.php">Diet Plan</a></h4> 
               <?php else: ?>
                 <h4>Diet Plan</h4> 
               <?php endif; ?>
