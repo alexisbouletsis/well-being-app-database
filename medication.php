@@ -3,32 +3,78 @@ session_start();
 // Include the database connection file
 include 'db_connection.php';
 
+
+
 // Function to fetch data from the medication table
-function fetchMedicationData($conn) {
+function fetchMedicationData($conn, $username) {
+    $sql = "SELECT * FROM medication WHERE customer_username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    return $result;
+}
+
+function fetchAllMedicationData($conn) {
     $sql = "SELECT * FROM medication";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
     return $result;
 }
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve data from the form
-    $customer_username = $_POST["customer_username"];
-    $medication_type = $_POST["medication_type"];
-    $medication_dosage = $_POST["medication_dosage"];
-    $medication_date_start = $_POST["medication_date_start"];
-    $medication_end_date = $_POST["medication_end_date"];
-
+    if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer'){
+        $username = $_SESSION['username'];
+        $medication_type = $_POST["medication_type"];
+        $medication_dosage = $_POST["medication_dosage"];
+        $medication_date_start = $_POST["medication_date_start"];
+        $medication_end_date = $_POST["medication_end_date"];
+    }
+    elseif (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee') {
+        $username = $_POST["username"];
+        $medication_type = $_POST["medication_type"];
+        $medication_dosage = $_POST["medication_dosage"];
+        $medication_date_start = $_POST["medication_date_start"];
+        $medication_end_date = $_POST["medication_end_date"];
+    }
     // Insert data into the medication table
     $insert_sql = "INSERT INTO medication (customer_username, medication_type, medication_dosage, medication_date_start, medication_end_date)
-                   VALUES ('$customer_username', '$medication_type', '$medication_dosage', '$medication_date_start', '$medication_end_date')";
+                   VALUES ('$username', '$medication_type', '$medication_dosage', '$medication_date_start', '$medication_end_date')";
+    
     if ($conn->query($insert_sql) === TRUE) {
-        // Fetch updated data after insertion
-        $result = fetchMedicationData($conn);
+        if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer'){
+             // Fetch updated data after insertion
+            $result = fetchMedicationData($conn, $username);
+        }
+        elseif (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee'){
+            // Fetch updated data after insertion
+            $result = fetchAllMedicationData($conn, $username);
+        }
     } 
 } else {
     // Fetch data initially
-    $result = fetchMedicationData($conn);
+    if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer'){
+        // Fetch updated data after insertion
+        
+        $username= $_SESSION['username'];
+        $result = fetchMedicationData($conn, $username);
+   }
+   elseif (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee'){
+       // Fetch updated data after insertion
+    //    $result = fetchAllMedicationData($conn, $username);
+       if (isset($_GET['search']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee') {
+            $search = $_GET['search'];
+            $sql = "SELECT * FROM medication WHERE customer_username LIKE '%$search%'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        } 
+   }
 }
 
 // Check if the user is logged in
@@ -44,6 +90,46 @@ if (isset($_GET['logout'])) {
     header("Location: index.php");
     exit();
 }
+
+
+// if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
+//     $username = $_SESSION['username'];
+//     $login_type = $_SESSION['login_type'];
+// }
+
+function fetchAllCustomerUsernames($conn) {
+    $usernames = array();
+
+    $sql = "SELECT DISTINCT customer_username FROM medication"; // Change 'medication' to your actual table name
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $usernames[] = $row['customer_username'];
+        }
+    }
+
+    return $usernames;
+}
+
+if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee') {
+    $selectedCustomer = $_GET['customer_username'];
+
+    // Fetch data based on the selected customer username
+    $sql = "SELECT * FROM medication WHERE customer_username LIKE '%$selectedCustomer%'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    // Default behavior - fetch all data
+    if ($_SESSION['login_type'] === 'employee') {
+        // Fetch all medication data for employees
+        $result = fetchAllMedicationData($conn);
+    }
+}
+
+
+
 
 ?>
 
@@ -142,6 +228,39 @@ if (isset($_GET['logout'])) {
         <div class="container">
         <div class="container mt-5">
         <div class="row justify-content-center">
+
+
+
+        <?php if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee'): ?>
+            <div class="container mt-3 mb-3">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="search-box">
+                            <form method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <div class="input-group mb-3">
+                                    <select class="form-select" name="customer_username">
+                                    <option value="">Select a customer username</option>
+                                        <!-- Populate the options dynamically based on available customer usernames -->
+                                        <?php
+                                        // Fetch customer usernames from the database and populate the dropdown options
+                                        $customerUsernames = fetchAllCustomerUsernames($conn); // Using the function from db_connection.php
+                                        foreach ($customerUsernames as $customerUsername) {
+                                            echo "<option value='" . $customerUsername . "'>" . $customerUsername . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                    <button class="btn btn-outline-secondary" type="submit" style="color: white; background-color: gray; border-color: white;">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+
+
+
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -160,13 +279,15 @@ if (isset($_GET['logout'])) {
                 echo "<tr><td>" . $row["customer_username"] . "</td><td>" . $row["medication_type"] . "</td><td>" . $row["medication_dosage"] . "</td><td>" . $row["medication_date_start"] . "</td><td>" . $row["medication_end_date"] . "</td></tr>";
                 }
             } else {
-                echo "<tr><td colspan='3'>No data found</td></tr>";
+                echo "<tr><td colspan='5'>No data found</td></tr>";
             }
             ?>
             </tbody>
         </table>
         </div>
         </div>
+
+        <?php if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer'): ?>
         <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-6">
@@ -208,7 +329,9 @@ if (isset($_GET['logout'])) {
             </div>
         </div>
         </div>
+        <?php endif; ?>
         </div>
+        
 
         </main><!-- End #main -->
 
