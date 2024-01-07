@@ -29,7 +29,8 @@ DROP TABLE IF EXISTS `activity`;
 CREATE TABLE `activity` (
   `activity_id` int NOT NULL,
   `activity_type` varchar(25) NOT NULL,
-  `duration` time NOT NULL,
+  `duration` int NOT NULL,
+  `activity_date` date NOT NULL,
   PRIMARY KEY (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -40,7 +41,7 @@ CREATE TABLE `activity` (
 
 LOCK TABLES `activity` WRITE;
 /*!40000 ALTER TABLE `activity` DISABLE KEYS */;
-INSERT INTO `activity` VALUES (65,'Swimming','00:30:00'),(216,'Yoga','01:15:00'),(321,'Walking','01:30:00'),(489,'Back - Biceps','01:00:00'),(7410,'Running','00:45:00');
+INSERT INTO `activity` VALUES (65,'Swimming',30,'2021-05-17'),(216,'Yoga',15,'2023-06-17'),(321,'Walking',30,'2022-05-16'),(489,'Back - Biceps',60,'2021-05-19'),(7410,'Running',45,'2021-04-16');
 /*!40000 ALTER TABLE `activity` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -321,6 +322,7 @@ CREATE TABLE `meal` (
   `proteins` float NOT NULL,
   `carbs` float NOT NULL,
   `fat` float NOT NULL,
+  `meal_date` date NOT NULL,
   PRIMARY KEY (`meal_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -331,7 +333,7 @@ CREATE TABLE `meal` (
 
 LOCK TABLES `meal` WRITE;
 /*!40000 ALTER TABLE `meal` DISABLE KEYS */;
-INSERT INTO `meal` VALUES ('21','Toast',102,'Tithe',3.2,19.1,1.4),('235','Baked chicken with rice',432,'Lunch',32,31,19),('65','Porridge',267,'Breakfast',9.1,38,8.2),('84','Spinach and banana yogurt',166,'Dinner',9.6,20,4),('8964','Greek spinach and rice',302,'Lunch',8,34,13);
+INSERT INTO `meal` VALUES ('21','Toast',102,'Tithe',3.2,19.1,1.4,'2021-05-17'),('235','Baked chicken with rice',432,'Lunch',32,31,19,'2021-06-17'),('65','Porridge',267,'Breakfast',9.1,38,8.2,'2023-05-17'),('84','Spinach and banana yogurt',166,'Dinner',9.6,20,4,'2023-08-17'),('8964','Greek spinach and rice',302,'Lunch',8,34,13,'2021-05-19');
 /*!40000 ALTER TABLE `meal` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;

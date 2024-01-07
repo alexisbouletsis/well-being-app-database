@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "student";
+$password = "159ariadn3951#";
 $dbname = "well-being_app_db";
 
 // Create connection
