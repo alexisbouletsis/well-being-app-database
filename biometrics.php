@@ -133,14 +133,7 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!-- <title>Well-being App</title> -->
-    <!-- Check if the user is logged in to set the title -->
-    <?php if ($isLoggedIn): ?>
-        <title>Welcome, <?php echo $_SESSION['username']; ?> - Well-being App</title>
-        <?php else: ?>
-            <title>Well-being App</title>
-        <?php endif; 
-    ?>
+    <title>Well-being App | Biometrics</title>
 
     <meta content="" name="description">
     <meta content="" name="keywords">

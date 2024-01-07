@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Temp page for plan</title>
+    <title>Temp plan</title>
 </head>
 <body>
 
-    <h1>Temporary file</h1>
+    <h1>Temporary file for plan</h1>
     <p>This is a simple HTML file that is to be replaced.</p>
 
 </body>
