@@ -147,6 +147,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <li><a href="biometrics.php">Biometrics</a></li>
           <li><a class="nav-link" href="login.php">Log In</a></li>
           <li><a href="signup.php">Sign Up</a></li>
+          <li><a href="biometrics.php">Biometrics</a></li>
+          <li><a class="nav-link" href="login.php">Log In</a></li>
+          <li><a href="signup.php">Sign Up</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
