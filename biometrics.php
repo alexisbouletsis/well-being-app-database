@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Include the database connection file
 include 'db_connection.php';
 
@@ -32,6 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Fetch data for a specific user (replace 'sample_user' with the actual username)
     $username = 'paris2';
     $result = fetchBiometricsDataForUser($conn, $username);
+}
+
+if (isset($_GET['logout'])) {
+  session_unset();
+  session_destroy();
+  header("Location: index.php");
+  exit();
 }
 
 ?>
@@ -101,13 +109,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <header id="header1" class="fixed-top d-flex align-items-center ">
     <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo1"><a href="index.html">Well-being App</a></h1>
+      <h1 class="logo1"><a href="index.php">Well-being App</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto" href="index.html">Home</a></li>
+          <li><a class="nav-link scrollto" href="index.php">Home</a></li>
           <li><a  href="#services">Services</a></li>
           <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
@@ -117,7 +125,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </li>
           <li><a href="medication.php">Medication</a></li>
           <li><a class="nav-link active" href="biometrics.php">Biometrics</a></li>
-          <li><a href="index.html">Logout</a></li>
+          <?php if (isset($_SESSION['username'])): ?>
+                <li><a href="index.php?logout=true" class="nav-link">Logout</a></li>
+          <?php else: ?>
+                <li><a href="login.php" class="nav-link">Login</a></li>
+                <li><a href="signup.php" class="nav-link">Signup</a></li>
+          <?php endif; ?>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

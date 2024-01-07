@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Include the database connection file
 include 'db_connection.php';
 
@@ -30,6 +31,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = fetchMedicationData($conn);
 }
 
+// Check if the user is logged in
+$isLoggedIn = false; // Set a default value
+if (isset($_SESSION['username'])) {
+    $isLoggedIn = true;
+
+
+}
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
+
 ?>
 
     <!DOCTYPE html>
@@ -39,7 +54,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Well-being App</title>
+    <!-- <title>Well-being App</title> -->
+    <!-- Check if the user is logged in to set the title -->
+    <?php if ($isLoggedIn): ?>
+        <title>Welcome, <?php echo $_SESSION['username']; ?> - Well-being App</title>
+        <?php else: ?>
+            <title>Well-being App</title>
+        <?php endif; 
+    ?>
+
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -74,18 +97,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <body style="background-color: #1B72BD; min-height: 100vh;">
 
-    <!-- ======= Header ======= -->
-    <header id="header" class="fixed-top d-flex align-items-center">
+        <!-- ======= Header ======= -->
+        <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex align-items-center justify-content-between">
 
-        <h1 class="logo"><a href="index.html">Well-being App</a></h1>
+        <h1 class="logo"><a href="index.php">Well-being App</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
         <nav id="navbar" class="navbar">
             <ul>
-            <li><a class="nav-link scrollto" href="index.html">Home</a></li>
-            <li><a class="nav-link scrollto " href="index.html #services">Services</a></li>
+            <li><a class="nav-link scrollto" href="index.php">Home</a></li>
+            <li><a class="nav-link scrollto " href="index.php #services">Services</a></li>
             <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
                 <ul>
                 <li><a href="#">Activity Plan</a></li>
@@ -93,20 +116,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
             </li>
             <li><a class="nav-link active" href="medication.php">Medication</a></li>
-            <li><a href="biometrics.html">Biometrics</a></li>
-            <li><a href="login.html">Log In</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="biometrics.php">Biometrics</a></li>
+            <?php if (isset($_SESSION['username'])): ?>
+                <li><a href="medication.php?logout=true" class="nav-link">Logout</a></li>
+            <?php else: ?>
+                <li><a href="login.php" class="nav-link">Login</a></li>
+                <li><a href="signup.php" class="nav-link">Signup</a></li>
+            <?php endif; ?>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+            <!-- <li><a href="login.php">Log In</a></li>
+            <li><a href="signup.php">Sign Up</a></li> -->
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
 
         </div>
-    </header><!-- End Header -->
+        </header><!-- End Header -->
 
 
 
 
-    <main id="main" style="padding-top: 100px; padding-bottom: 20px;"> <!-- Adjust the padding value as needed -->
+        <main id="main" style="padding-top: 100px; padding-bottom: 20px;"> <!-- Adjust the padding value as needed -->
         <!-- <div style="height: 10000px;"> -->
         <div class="container">
         <div class="container mt-5">
@@ -179,11 +210,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         </div>
 
-    </main><!-- End #main -->
+        </main><!-- End #main -->
 
-    <!-- ======= Footer ======= -->
-    <footer id="footer">
-    <div class="container text-center">
+        <!-- ======= Footer ======= -->
+        <footer id="footer">
+        <div class="container text-center">
         <div class="copyright">
         &copy; Copyright <strong><span>Well-being App</span></strong>. All Rights Reserved
         </div>
@@ -197,23 +228,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/anyar-free-multipurpose-one-page-bootstrap-theme/ -->
         </div>
-    </div>
-    </footer><!-- End Footer -->
+        </div>
+        </footer><!-- End Footer -->
 
 
-    <div id="preloader"></div>
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        <div id="preloader"></div>
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/aos/aos.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
+        <!-- Vendor JS Files -->
+        <script src="assets/vendor/aos/aos.js"></script>
+        <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+        <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+        <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+        <script src="assets/vendor/php-email-form/validate.js"></script>
 
-    <!-- Template Main JS File -->
-    <script src="assets/js/main.js"></script>
+        <!-- Template Main JS File -->
+        <script src="assets/js/main.js"></script>
 
     </body>
 

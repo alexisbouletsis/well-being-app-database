@@ -1,3 +1,61 @@
+<?php
+session_start();
+// Include the database connection file
+include 'db_connection.php';
+
+// Function to fetch data from the medication table
+function fetchMedicationData($conn) {
+    $sql = "SELECT * FROM medication";
+    $result = $conn->query($sql);
+    return $result;
+}
+
+
+// Check if the user is logged in
+$isLoggedIn = false; // Set a default value
+if (isset($_SESSION['username'])) {
+    $isLoggedIn = true;
+}
+
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
+
+
+if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
+  $username = $_SESSION['username'];
+  $login_type = $_SESSION['login_type'];
+
+  // Check the login type and perform the appropriate query to get the user's real name
+  if ($login_type === 'employee') {
+      $sql = "SELECT name FROM employee WHERE employee_username = ? ";
+  } elseif ($login_type === 'customer') {
+      $sql = "SELECT name FROM customer WHERE customer_username = ? ";
+  }
+
+  // Prepare the statement
+  $statement = $conn->prepare($sql);
+  $statement->bind_param('s', $username);
+
+  // Execute the query
+  $statement->execute();
+
+  // Store the result
+  $statement->bind_result($real_name);
+
+  // Fetch the result
+  $statement->fetch();
+
+  // Close the statement
+  $statement->close();
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,26 +66,7 @@
   <title>Well-being App</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
-  <style>
-    #header1{
-        background: rgba(5, 87 , 158, 0.9);
-        height: 60px;
-    }
 
-    #header1 .logo1 a{
-        color: white;
-    }
-
-    #header1 .logo1{
-        font-size: 30px;
-        margin: 0;
-        padding: 0;
-        line-height: 1;
-        font-weight: 400;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
-  </style>
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -60,32 +99,68 @@
 <body>
 
   <!-- ======= Header ======= -->
-  <header id="header1" class="fixed-top d-flex align-items-center ">
+  <header id="header" class="fixed-top d-flex align-items-center ">
     <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo1"><a href="index.php">Well-being App</a></h1>
+      <h1 class="logo"><a href="index.php">Well-being App</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
           <li><a class="nav-link scrollto" href="#services">Services</a></li>
-          <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="#">Activity Plan</a></li>
-              <li><a href="#">Diet Plan</a></li>
-            </ul>
-          </li>
-          <li><a href="medication.html">Medication</a></li>
-          <li><a href="biometrics.php">Biometrics</a></li>
-          <li><a href="index.php">Logout</a></li>
+          <?php if (isset($_SESSION['username'])): ?>
+            <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
+                <ul>
+                <li><a href="#">Activity Plan</a></li>
+                <li><a href="#">Diet Plan</a></li>
+                </ul>
+            </li>
+            <li><a class="nav-link" href="medication.php">Medication</a></li>
+            <li><a href="biometrics.php">Biometrics</a></li>
+                <li><a href="medication.php?logout=true" class="nav-link">Logout</a></li>
+            <?php else: ?>
+                <li><a href="login.php" class="nav-link">Login</a></li>
+                <li><a href="signup.php" class="nav-link">Signup</a></li>
+            <?php endif; ?>
+<!-- 
+          <li><a href="login.php">Log In</a></li>
+          <li><a href="signup.php">Sign Up</a></li>  -->
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
     </div>
-  </header><!-- End Header -->  
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex justify-cntent-center align-items-center">
+    <div id="heroCarousel" data-bs-interval="5000" class="container carousel carousel-fade" data-bs-ride="carousel">
+
+      <!-- Slide 1 -->
+      <div class="carousel-item active">
+        <div class="carousel-container">
+          <!-- <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Well-being App</span></h2> -->
+          <?php if (isset($_SESSION['username'])): ?>
+            <h2 class="animate__animated animate__fadeInDown">Welcome, <?php echo $real_name; ?></h2>
+          <?php else: ?>
+              <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Well-being App</span></h2>
+          <?php endif; ?>
+          <p class="animate__animated animate__fadeInUp">
+            Our mission is to empower well-being-focused companies that prioritize health and fitness. 
+            We have developed a comprehensive database tailored for companies providing nutritionists, fitness trainers, and health scientists, who, in turn, serve clients seeking to monitor and enhance their physical well-being.
+            Our platform is designed to facilitate seamless communication between well-being professionals and their clients, ensuring a personalized and effective approach to health management. 
+          </p>
+          <?php if (!isset($_SESSION['username'])): ?>
+              <a href="signup.php" class="btn-get-started animate__animated animate__fadeInUp scrollto">Sign Up</a>
+              <a href="login.php" class="btn-get-started animate__animated animate__fadeInUp scrollto">Log in</a>
+            <?php endif; ?>
+        </div>
+      </div>
+
+    </div>
+  </section><!-- End Hero -->
 
   <main id="main">
 
@@ -102,28 +177,46 @@
           <div class="col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
             <div class="icon-box">
               <i class="bi bi-person-walking"></i>
-              <h4><a href="#">Activity Plan</a></h4>
+              <?php if (isset($_SESSION['username'])): ?>
+                <h4><a href="activityplan.php">Activity Plan</a></h4>
+              <?php else: ?>
+                <h4>Activity Plan</h4>
+              <?php endif; ?>
               <p>Personalized activity plan, outlining exercises and physical activities tailored to your fitness goals and preferences</p>
             </div>
           </div>
           <div class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="200">
             <div class="icon-box">
               <i class="bi bi-cup-hot-fill"></i>
-              <h4><a href="#">Diet Plan</a></h4>
+              <!-- <h4><a href="dietplan.php">Diet Plan</a></h4> -->
+              <?php if (isset($_SESSION['username'])): ?>
+                <h4><a href="dietplan.php">Diet Plan</a></h4> 
+              <?php else: ?>
+                <h4>Diet Plan</h4> 
+              <?php endif; ?>
               <p>Customized diet plan that aligns with your nutritional needs, allowing you to make informed choices for a healthier lifestyle</p>
             </div>
           </div>
           <div class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="300">
             <div class="icon-box">
               <i class="bi bi-clipboard-pulse"></i>
-              <h4><a href="biometrics.php">Biometrics</a></h4>
+              <!-- <h4><a href="biometrics.php">Biometrics</a></h4> -->
+              <?php if (isset($_SESSION['username'])): ?>
+                <h4><a href="biometrics.php">Biometrics</a></h4>
+              <?php else: ?>
+                <h4>Biometrics</h4>
+              <?php endif; ?>
               <p>Record and monitor your body metrics, such as weight, height, and other relevant measurements, providing a visual representation of your progress over time</p>
             </div>
           </div>
           <div class="col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="400">
             <div class="icon-box">
               <i class="bi bi-capsule-pill"></i>
-              <h4><a href="#">Medication</a></h4>
+              <?php if (isset($_SESSION['username'])): ?>
+              <h4><a href="medication.php">Medication</a></h4>
+              <?php else: ?>
+                <h4>Medication</h4>
+              <?php endif; ?>
               <p>Keep track of your medications and health supplements, ensuring a comprehensive overview of your well-being journey and adherence to prescribed treatments</p>
             </div>
           </div>
@@ -141,12 +234,15 @@
     <div class="copyright">
       &copy; Copyright <strong><span>Well-being App</span></strong>. All Rights Reserved
     </div>
+    <div class="contact-info">
+      <i class="bi bi-envelope-fill"></i><a href="mailto:info@wellbeing.com">info@wellbeing.com</a>
+      <i class="bi bi-phone-fill phone-icon"></i> +1 5589 55488 55
+  </div>
     <div class="credits">
       <!-- All the links in the footer should remain intact. -->
       <!-- You can delete the links only if you purchased the pro version. -->
       <!-- Licensing information: https://bootstrapmade.com/license/ -->
       <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/anyar-free-multipurpose-one-page-bootstrap-theme/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
     </div>
   </div>
 </footer><!-- End Footer -->

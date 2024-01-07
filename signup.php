@@ -1,3 +1,70 @@
+<?php
+// Include the database connection file
+include 'db_connection.php';
+
+function fetchSignupData($conn, $name, $username, $password, $email, $dob, $gender) {
+  // Check if the email already exists
+  $check_email = "SELECT * FROM customer WHERE email='$email'";
+  $email_result = $conn->query($check_email);
+  if ($email_result->num_rows > 0) {
+      return "Email already exists";
+  }
+
+  // Check if the username already exists
+  $check_username = "SELECT * FROM customer WHERE customer_username='$username'";
+  $username_result = $conn->query($check_username);
+  if ($username_result->num_rows > 0) {
+      return "Username already exists";
+  }
+
+  $date_of_subscription = date("Y-m-d"); // Get the current date in YYYY-MM-DD format
+
+  $sql = "INSERT INTO customer (name, customer_username, password, email, date_of_birth, gender, date_of_subscription) VALUES ('$name', '$username', '$password', '$email', '$dob', '$gender', '$date_of_subscription')";
+  
+  $result = $conn->query($sql);
+  
+  if ($result) {
+    // Successful signup
+    // Perform automated login
+    
+    // Retrieve user ID after signup
+    $newUserId = $conn->insert_id;
+
+    // Set session variables for the newly registered user
+    session_start();
+    $_SESSION['user_id'] = $newUserId;
+    $_SESSION['username'] = $username;
+    $_SESSION['login_type'] = 'customer';
+
+    // Redirect to index.php
+    header("Location: index.php");
+    exit();
+  } else {
+    return "Signup failed! Please try again.";
+  }
+}
+
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $username = $_POST['username'];
+    $password = $_POST['password']; // Hash the password for security (use PHP password_hash)
+    $email = $_POST['email'];
+    $dob = $_POST['dob'];
+    $gender = $_POST['gender'];
+
+    $signup_result = fetchSignupData($conn, $name, $username, $password, $email, $dob, $gender);
+
+    if ($signup_result !== "Success") {
+        // Signup failed, display an error message
+        $error_message = $signup_result;
+    }
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,22 +103,40 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+    } 
+
+    /* Adjustments for your footer */
+    #footer {
+      position: sticky;
+    }
+    </style>
 </head>
 
-<body>
+<body style="background-color: #1B72BD; min-height: 100vh;">
+
 
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top d-flex align-items-center ">
     <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo"><a href="index.html">Well-being App</a></h1>
+      <h1 class="logo"><a href="index.php">Well-being App</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      <!-- <a href=index.php" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto" href="index.html">Home</a></li>
-          <li><a class="nav-link scrollto " href="index.html #services">Services</a></li>
+          <li><a class="nav-link scrollto" href="index.php">Home</a></li>
+          <li><a class="nav-link scrollto " href="index.php #services">Services</a></li>
           <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#">Activity Plan</a></li>
@@ -59,18 +144,24 @@
             </ul>
           </li>
           <li><a href="medication.php">Medication</a></li>
-          <li><a href="biometrics.html">Biometrics</a></li>
-          <li><a class="nav-link" href="login.html">Log In</a></li>
-          <li><a href="signup.html">Sign Up</a></li>
+          <li><a href="biometrics.php">Biometrics</a></li>
+          <li><a class="nav-link" href="login.php">Log In</a></li>
+          <li><a href="signup.php">Sign Up</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
     </div>
+
+
   </header><!-- End Header -->
 
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex justify-cntent-center align-items-center">
+  
+  <main id="main" style="padding-top: 100px; padding-bottom: 20px;"> <!-- Adjust the padding value as needed -->
+  <div class="container">
+  <div class="container mt-5">
+  <div class="row justify-content-center">
+  
     <div id="heroCarousel" data-bs-interval="5000" class="container carousel carousel-fade" data-bs-ride="carousel">
         <div class="container mt-5">
           <div class="row justify-content-center">
@@ -126,22 +217,20 @@
                                 </div>
                             </div>
                         </div>
-                        <center><button type="submit" class="btn btn-primary btn-block">Sign Up</button></center>
-                    </form>
-                    <p class="text-center mt-3 text-muted">Already have an account? <a href="login.html">Log in</a></p>
+                          <?php if (isset($error_message)): ?>
+                            <div class="alert alert-danger" role="alert">
+                              <?php echo $error_message; ?>
+                            </div>
+                          <?php endif; ?>
+                          <center><button type="submit" class="btn btn-primary btn-block">Sign Up</button></center>
+                      </form>
+                    <p class="text-center mt-3 text-muted">Already have an account? <a href="login.php">Log in</a></p>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-  </section><!-- End Hero -->
+  </main>
 
-  <main id="main">
-
-    <!-- ======= Icon Boxes Section ======= -->
-    <section id="icon-boxes" class="icon-boxes">
-     
-  </main><!-- End #main -->
 
 
   <!-- ======= Footer ======= -->
