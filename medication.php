@@ -3,8 +3,6 @@ session_start();
 // Include the database connection file
 include 'db_connection.php';
 
-
-
 // Function to fetch data from the medication table
 function fetchMedicationData($conn, $username) {
     $sql = "SELECT * FROM medication WHERE customer_username = ?";
@@ -192,6 +190,7 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
             </li>
             <li><a class="nav-link active" href="medication.php">Medication</a></li>
             <li><a href="biometrics.php">Biometrics</a></li>
+            <li><a href="appointments.php">Appointments</a></li>
             <?php if (isset($_SESSION['username'])): ?>
                 <li><a href="medication.php?logout=true" class="nav-link">Logout</a></li>
             <?php else: ?>

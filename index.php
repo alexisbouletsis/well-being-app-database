@@ -119,11 +119,12 @@ if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
             </li>
             <li><a class="nav-link" href="medication.php">Medication</a></li>
             <li><a href="biometrics.php">Biometrics</a></li>
-                <li><a href="medication.php?logout=true" class="nav-link">Logout</a></li>
-            <?php else: ?>
-                <li><a href="login.php" class="nav-link">Login</a></li>
-                <li><a href="signup.php" class="nav-link">Signup</a></li>
-            <?php endif; ?>
+            <li><a href="appointments.php">Appointments</a></li>
+            <li><a href="medication.php?logout=true" class="nav-link">Logout</a></li>
+          <?php else: ?>
+              <li><a href="login.php" class="nav-link">Login</a></li>
+              <li><a href="signup.php" class="nav-link">Signup</a></li>
+          <?php endif; ?>
 <!-- 
           <li><a href="login.php">Log In</a></li>
           <li><a href="signup.php">Sign Up</a></li>  -->
