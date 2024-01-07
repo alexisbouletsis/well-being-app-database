@@ -92,10 +92,6 @@ if (isset($_GET['logout'])) {
 }
 
 
-// if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
-//     $username = $_SESSION['username'];
-//     $login_type = $_SESSION['login_type'];
-// }
 
 function fetchAllCustomerUsernames($conn) {
     $usernames = array();
@@ -296,10 +292,6 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
                     <h4 style="color: #007bff;">Add Medication</h4>
                     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
-                    <div class="form-group">
-                        <label for="customer_username" style="color: #333;">Customer Username:</label>
-                        <input type="text" class="form-control" id="customer_username" name="customer_username" required>
-                    </div>
                     
                     <div class="form-group">
                         <label for="medication_type" style="color: #333;">Medication Type:</label>
