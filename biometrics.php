@@ -115,7 +115,7 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
     $result = $stmt->get_result();
 } else {
     // Default behavior - fetch all data
-    if ($_SESSION['login_type'] === 'employee') {
+    if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee') {
         // Fetch all medication data for employees
         $result = fetchAllBiometricsData($conn);
     }
@@ -263,7 +263,13 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
 
 
 
+        <?php if (!isset($_SESSION['username']) ): ?>
+            <div class="section-title">
+                <h2>You need to login to access this page </h2>
+            </div>
 
+        <?php elseif (isset($_SESSION['username']) ): ?>
+        
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -282,7 +288,7 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
             <?php
 
             // Display data in the table
-            if ($result->num_rows > 0) {
+            if (isset($_SESSION['username'])  && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                 // echo "<tr><td>" . $row["customer_username"] . "</td><td>" . $row["height"] . "</td><td>" . $row["weight"] . "</td><td>" . $row["body_fat_percentage"] . "</td><td>" . $row["fluid_percentage"] . "</td><td>" . $row["bone_percentage"] . "</td><td>" . $row["measurement_date"] "</td></tr>";
                 echo "<tr><td>" . $row["customer_username"] . "</td><td>" . $row["height"] . "</td><td>" . $row["weight"] . "</td><td>" . $row["body_fat_percentage"] . "</td><td>". $row["muscle_percentage"] . "</td><td>" . $row["fluid_percentage"] . "</td><td>" . $row["bone_percentage"] . "</td><td>" . $row["measurement_date"] . "</td></tr>";
@@ -345,6 +351,8 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
         </div>
         </div>
         <?php endif; ?> 
+        
+        <?php endif; ?>
 
         </main><!-- End #main -->
 

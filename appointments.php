@@ -164,6 +164,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+    } 
+
+    /* Adjustments for your footer */
+    #footer {
+      position: sticky;
+    }
+    </style>
 </head>
 
 <body style="background-color: #1B72BD; min-height: 100vh;">
@@ -178,7 +195,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <ul>
           <li><a class="nav-link scrollto" href="index.php">Home</a></li>
           <li><a  href="#services">Services</a></li>
-          <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
+          
+          <?php if (isset($_SESSION['username'])): ?>
+            <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#">Activity Plan</a></li>
               <li><a href="#">Diet Plan</a></li>
@@ -187,7 +206,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <li><a href="medication.php">Medication</a></li>
           <li><a href="biometrics.php">Biometrics</a></li>
           <li><a class="nav-link active" href="appointments.php">Appointments</a></li>
-          <li><a href="index.php">Logout</a></li>
+                <li><a href="index.php?logout=true" class="nav-link">Logout</a></li>
+            <?php else: ?>
+                <li><a href="login.php" class="nav-link">Login</a></li>
+                <li><a href="signup.php" class="nav-link">Signup</a></li>
+            <?php endif; ?>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -196,7 +219,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </header><!-- End Header -->  
 
   <main id="main" style="padding-top: 100px; padding-bottom: 20px;"> <!-- Adjust the padding value as needed -->
-        <div style="height: 10000px;">
         <div class="container">
         <div class="container mt-5">
         <div class="row justify-content-center">
@@ -298,6 +320,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </tbody>
         </table>
                     
+        <?php elseif (!isset($_SESSION['username']) ): ?>
+            <div class="section-title">
+                <h2>You need to login to access this page </h2>
+            </div>
         <?php endif; ?>
         </div>
         </div>

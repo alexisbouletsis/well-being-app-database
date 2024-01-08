@@ -116,7 +116,7 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
     $result = $stmt->get_result();
 } else {
     // Default behavior - fetch all data
-    if ($_SESSION['login_type'] === 'employee') {
+    if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee') {
         // Fetch all medication data for employees
         $result = fetchAllMedicationData($conn);
     }
@@ -166,6 +166,22 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
+    <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+    } 
+
+    /* Adjustments for your footer */
+    #footer {
+      position: sticky;
+    }
+    </style>
     </head>
 
     <body style="background-color: #1B72BD; min-height: 100vh;">
@@ -244,10 +260,20 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
+            
+        <?php endif; ?> 
+        
 
 
 
+
+
+        <?php if (!isset($_SESSION['username']) ): ?>
+            <div class="section-title">
+                <h2>You need to login to access this page </h2>
+            </div>
+
+        <?php elseif (isset($_SESSION['username']) ): ?>
 
         <table class="table table-bordered">
             <thead>
@@ -275,7 +301,6 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
         </div>
         </div>
 
-        <?php if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer'): ?>
         <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-6">

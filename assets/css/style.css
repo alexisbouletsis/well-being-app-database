@@ -2317,17 +2317,20 @@ th, td {
 }
 
 th {
+  text-align: center;
   background-color: #f2f2f2;
+  font-weight: normal;
+  color: #007aff !important;
 }
 
 td:first-child{
-  background-color: bisque;
+  background-color: #c2d9ed;
 }
 
 td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: left;
+  text-align: center;
   position: relative;
 }
 
