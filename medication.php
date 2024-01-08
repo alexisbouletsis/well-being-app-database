@@ -123,6 +123,51 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
 }
 
 
+function fetchCustomerFullName($conn, $username) {
+    $sql = "SELECT name FROM customer WHERE customer_username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['name'];
+    } else {
+        return "Unknown"; // Default value if full name is not found
+    }
+}
+
+function fetchAllCustomerFullNames($conn) {
+    $fullNames = array();
+
+    $sql = "SELECT customer_username, name FROM customer"; // Adjust table name if needed
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $fullNames[$row['customer_username']] = $row['name'];
+        }
+    }
+
+    return $fullNames;
+}
+
+function fetchEmployeeFullName($conn, $username) {
+    $sql = "SELECT name FROM employee WHERE employee_username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['name'];
+    } else {
+        return "Unknown"; // Default value if full name is not found
+    }
+}
+
 
 
 ?>
@@ -242,18 +287,19 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
                         <div class="search-box">
                             <form method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                 <div class="input-group mb-3">
-                                    <select class="form-select" name="customer_username">
-                                    <option value="">Select a customer username</option>
-                                        <!-- Populate the options dynamically based on available customer usernames -->
-                                        <?php
-                                        // Fetch customer usernames from the database and populate the dropdown options
-                                        $customerUsernames = fetchAllCustomerUsernames($conn); // Using the function from db_connection.php
-                                        foreach ($customerUsernames as $customerUsername) {
-                                            echo "<option value='" . $customerUsername . "'>" . $customerUsername . "</option>";
-                                        }
+                                    <?php
+                                        $customerFullNames = fetchAllCustomerFullNames($conn); // Using the function from above
                                         ?>
-                                    </select>
-                                    <button class="btn btn-outline-secondary" type="submit" style="color: white; background-color: gray; border-color: white;">Search</button>
+                                        <select class="form-select" name="customer_username">
+                                            <option value="">Select a customer</option>
+                                            <?php
+                                            foreach ($customerFullNames as $username => $fullName) {
+                                                echo "<option value='" . $username . "'>" . $fullName . "</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                        <button class="btn btn-outline-secondary" type="submit" style="color: white; background-color: gray; border-color: white;">Search</button>
+            
                                 </div>
                             </form>
                         </div>
@@ -290,8 +336,10 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
             // Display data in the table
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                echo "<tr><td>" . $row["customer_username"] . "</td><td>" . $row["medication_type"] . "</td><td>" . $row["medication_dosage"] . "</td><td>" . $row["medication_date_start"] . "</td><td>" . $row["medication_end_date"] . "</td></tr>";
-                }
+                // echo "<tr><td>" . $row["customer_username"] . "</td><td>" . $row["medication_type"] . "</td><td>" . $row["medication_dosage"] . "</td><td>" . $row["medication_date_start"] . "</td><td>" . $row["medication_end_date"] . "</td></tr>";
+                echo "<tr><td>" . fetchCustomerFullName($conn, $row["customer_username"]) . "</td><td>" . $row["medication_type"] . "</td><td>" . $row["medication_dosage"] . "</td><td>" . $row["medication_date_start"] . "</td><td>" . $row["medication_end_date"] . "</td></tr>";
+
+            }
             } else {
                 echo "<tr><td colspan='5'>No data found</td></tr>";
             }
@@ -300,6 +348,12 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
         </table>
         </div>
         </div>
+
+
+        
+        <?php endif; ?>         
+        
+        <?php if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer'): ?>
 
         <div class="container mt-5">
         <div class="row justify-content-center">
@@ -339,8 +393,6 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
         </div>
         </div>
         <?php endif; ?>
-        </div>
-        
 
         </main><!-- End #main -->
 
