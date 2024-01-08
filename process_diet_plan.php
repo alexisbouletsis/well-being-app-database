@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 ('$meal_name', '$calories', '$type', '$proteins', '$carbs', '$fat', '$meal_date', '$meal_id')";
         
         if ($conn->query($sql) === TRUE) {
+            $diet_plan_type = $_POST['diet_plan_type'];
             // Now, insert data into the diet_plan table
             $sql = "INSERT INTO diet_plan (diet_plan_type, meal_id, plan_id) VALUES ('$diet_plan_type', '$meal_id', '$plan_id')";
     
@@ -40,4 +41,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error inserting data into plan: " . $conn->error;
     }
 }
+$conn->close();
 ?>

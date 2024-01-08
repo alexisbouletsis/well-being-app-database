@@ -40,4 +40,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error inserting data into plan: " . $conn->error;
     }
 }
+$conn->close();
 ?>
