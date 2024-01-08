@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
     $customer_username = $_POST['customer_username'];
-    $plan_id = intval(microtime(true)/1000); 
+    $plan_id = intval(microtime(true)/1000) + rand(); 
     
     $sql = "INSERT INTO plan (plan_id, start_date, end_date, customer_username) VALUES ('$plan_id', '$start_date', '$end_date', '$customer_username')";    
 
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $activity_date = $_POST['activity_date'];
 
         // Insert data into the activity table first
-        $activity_id = intval(microtime(true)/1000) + 1; 
+        $activity_id = intval(microtime(true)/1000) + rand(); 
 
         $sql = "INSERT INTO activity (activity_type, duration, activity_date, activity_id) VALUES
                                 ('$activity_type', '$duration', '$activity_date', '$activity_id')";

@@ -26,7 +26,7 @@ $sql_1 = "SELECT *
 
 $result_1 = $conn->query($sql_1);
 $data = array();
-
+$data['username'] = $selectedCustomer;
 if ($result_1->num_rows > 0) {
     $row = $result_1->fetch_assoc();
     $data['activityPlanType'] = $row["activity_plan_type"];

@@ -1,3 +1,23 @@
+<?php
+session_start();
+// Include the database connection file
+include 'db_connection.php';
+// Check if the user is logged in
+$isLoggedIn = false; // Set a default value
+if (isset($_SESSION['username'])) {
+    $isLoggedIn = true;
+
+
+}
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +25,7 @@
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-<title>Well-being App</title>
+<title>Well-being App | Plan</title>
 <meta content="" name="description">
 <meta content="" name="keywords">
 
@@ -65,27 +85,44 @@
 <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
 
-    <h1 class="logo"><a href="index.html">Well-being App</a></h1>
+    <h1 class="logo"><a href="index.php">Well-being App</a></h1>
     <!-- Uncomment below if you prefer to use an image logo -->
     <!-- <a href=index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
     <nav id="navbar" class="navbar">
-        <ul>
-        <li><a class="nav-link scrollto" href="index.html">Home</a></li>
-        <li><a class="nav-link scrollto " href="index.html #services">Services</a></li>
-        <li><a class="nav-link active" href="plan.php">Plan</a></li>
-        <li><a href="medication.php">Medication</a></li>
-        <li><a href="biometrics.php">Biometrics</a></li>
-        <li><a href="login.php">Log In</a></li>
-        <li><a href="signup.php">Sign Up</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-    </nav><!-- .navbar -->
+            <ul>
+            <li><a class="nav-link scrollto" href="index.php">Home</a></li>
+            <li><a class="nav-link scrollto " href="index.php #services">Services</a></li>
+            <li><a class="nav-link active" href="plan.php">Plan</a></li>
+            <li><a href="medication.php">Medication</a></li>
+            <li><a href="biometrics.php">Biometrics</a></li>
+            <li><a href="appointments.php">Appointments</a></li>
+            <?php if (isset($_SESSION['username'])): ?>
+                <li><a href="plan.php?logout=true" class="nav-link">Logout</a></li>
+            <?php else: ?>
+                <li><a href="login.php" class="nav-link">Login</a></li>
+                <li><a href="signup.php" class="nav-link">Signup</a></li>
+            <?php endif; ?>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+            <!-- <li><a href="login.php">Log In</a></li>
+            <li><a href="signup.php">Sign Up</a></li> -->
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
 
     </div>
 </header><!-- End Header -->
 
 <main id="main" style="padding-top: 100px; padding-bottom: 20px;"> <!-- Adjust the padding value as needed -->
+    <?php if (!isset($_SESSION['username']) ): ?>
+            <div class="section-title">
+                <h2>You need to login to access this page </h2>
+            </div>
+
+    <?php elseif (isset($_SESSION['username']) ): ?>
+
+    <?php if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee'): ?>
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
@@ -96,11 +133,13 @@
                         <input type="date" class="form-control" id="datePicker">
                     </div>
 
-                    <div class="form-group">
-                    <h4 style="color: #007bff;">Select a Customer</h4>
-                        <select class="form-control" id="customerDropdown"></select>
-                    </div>
 
+                        <div class="form-group">
+                        <h4 style="color: #007bff;">Select a Customer</h4>
+                            <select class="form-control" id="customerDropdown"></select>
+                        </div>
+
+                        
                     <center>
                         <button type="button" class="btn btn-primary" onclick="storeAndPrintValues()">Search</button>
                     </center>
@@ -111,6 +150,36 @@
             </div>
         </div>
     </div>
+    <?php elseif (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer'): ?>
+
+        <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+            <div class="signup-box">
+                <form>
+                    <div class="form-group">
+                        <h4 style="color: #007bff;">Select a Date</h4>
+                        <input type="date" class="form-control" id="datePicker">
+                    </div>
+
+
+                        <!-- <div class="form-group">
+                        <h4 style="color: #007bff;">Select a Customer</h4>
+                            <select class="form-control" id="customerDropdown"></select>
+                        </div> -->
+
+                        
+                    <center>
+                        <button type="button" class="btn btn-primary" onclick="storeAndPrintValues()">Search</button>
+                    </center>
+                </form>
+
+                <br>
+            </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?> 
 
     <div class="container">
     <div class="container mt-5">
@@ -148,6 +217,7 @@
     </div>
     </div>
     </div>
+    <?php if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'employee'): ?>
 
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -290,7 +360,8 @@
             </div>
         </div>
         </div>
-
+        <?php endif; ?>
+        <?php endif; ?> 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -324,7 +395,16 @@
         // Function to handle button click and fetch/display data from the database
         function storeAndPrintValues() {
             var selectedDate = document.getElementById('datePicker').value;
-            var selectedCustomer = document.getElementById('customerDropdown').value;
+            var selectedCustomer;
+
+            <?php
+            if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer') {                
+                echo "selectedCustomer = '" . $_SESSION['username'] . "';";
+            } else {
+                echo "selectedCustomer = document.getElementById('customerDropdown').value;";
+            }
+            ?>
+                console.log(selectedCustomer); // Log the entire data object to the console
 
             // Make an AJAX request to fetch data from the server
             fetch('fetch_plan.php', {
@@ -394,7 +474,17 @@
         // Function to fetch and display data based on selected date and customer
         function fetchAndDisplayData() {
             var selectedDate = document.getElementById('datePicker').value;
-            var selectedCustomer = document.getElementById('customerDropdown').value;
+            var selectedCustomer;
+
+            <?php
+            if (isset($_SESSION['username']) && isset($_SESSION['login_type']) && $_SESSION['login_type'] === 'customer') {
+                echo "selectedCustomer = '" . $_SESSION['username'] . "';";
+            } else {
+                echo "selectedCustomer = document.getElementById('customerDropdown').value;";
+            }
+            ?>
+                            console.log(selectedCustomer); // Log the entire data object to the console
+
 
             // Fetch and display data from the database
             fetch('fetch_plan.php', {

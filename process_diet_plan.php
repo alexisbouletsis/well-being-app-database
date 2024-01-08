@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
     $customer_username = $_POST['customer_username'];
-    $plan_id = intval(microtime(true)/1000); 
+    $plan_id = intval(microtime(true)/1000) + rand(); 
     
     $sql = "INSERT INTO plan (plan_id, start_date, end_date, customer_username) VALUES ('$plan_id', '$start_date', '$end_date', '$customer_username')";    
 
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $carbs = $_POST['carbs'];
         $fat = $_POST['fat'];
         $meal_date = $_POST['meal_date'];
-        $meal_id = intval(microtime(true)/1000) + 1; 
+        $meal_id = intval(microtime(true)/1000) + rand(); 
 
         $sql = "INSERT INTO meal (meal_name, calories, type, proteins, carbs, fat, meal_date, meal_id) VALUES
                                 ('$meal_name', '$calories', '$type', '$proteins', '$carbs', '$fat', '$meal_date', '$meal_id')";
