@@ -1,12 +1,8 @@
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
--- Host: localhost    Database: well-being_app_db
+-- Host: 127.0.0.1    Database: well-being_app_db
 -- ------------------------------------------------------
 -- Server version	8.0.34
-
-DROP SCHEMA IF EXISTS `well-being_app_db`;
-CREATE SCHEMA `well-being_app_db`;
-USE `well-being_app_db`;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -202,7 +198,7 @@ CREATE TABLE `customer_meets_employee` (
   `employee_username` varchar(25) NOT NULL,
   `appointment_date` datetime NOT NULL,
   `appointment_type` varchar(25) NOT NULL,
-  PRIMARY KEY (`customer_username`,`employee_username`),
+  PRIMARY KEY (`customer_username`,`employee_username`,`appointment_date`),
   KEY `fk_customer_has_employee_employee1_idx` (`employee_username`),
   KEY `fk_customer_has_employee_customer_idx` (`customer_username`),
   CONSTRAINT `fk_customer_has_employee_customer` FOREIGN KEY (`customer_username`) REFERENCES `customer` (`customer_username`),
@@ -644,4 +640,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-16 17:44:31
+-- Dump completed on 2024-01-08 20:26:14
