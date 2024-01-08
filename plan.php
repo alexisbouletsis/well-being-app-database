@@ -227,11 +227,17 @@ if (isset($_GET['logout'])) {
                     <h4 style="color: #007bff;">Create Diet Plan</h4>
                     <form id="dietPlanForm" method="post" action="">
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="customer_username" style="color: #333;">Customer:</label>
                         <input type="text" class="form-control" id="customer_username" name="customer_username" required>
+                    </div> -->
+                    <div class="form-group">
+                        <label for="customer_username1" style="color: #333;">Customer:</label>
+                        <select class="form-control" id="customer_username1" name="customer_username1" required>
+                            <!-- Options will be dynamically populated here -->
+                        </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="start_date" style="color: #333;">Plan Start Date:</label>
                         <input type="date" class="form-control" id="start_date" name="start_date" required>
@@ -312,8 +318,10 @@ if (isset($_GET['logout'])) {
                             <form id="activityPlanForm" method="post" action="">
 
                             <div class="form-group">
-                                <label for="customer_username" style="color: #333;">Customer:</label>
-                                <input type="text" class="form-control" id="customer_username" name="customer_username" required>
+                                <label for="customer_username2" style="color: #333;">Customer:</label>
+                                <select class="form-control" id="customer_username2" name="customer_username2" required>
+                                    <!-- Options will be dynamically populated here -->
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -570,8 +578,41 @@ if (isset($_GET['logout'])) {
         });
     });
 </script>
+<script>
+    // Fetch data from get_customer_usernames.php using JavaScript
+    fetch('get_customer_usernames.php')
+        .then(response => response.json())
+        .then(data => {
+            // Populate the dropdown options for Form 1
+            const dropdown = document.getElementById('customer_username1');
 
+            data.forEach(username => {
+                const option = document.createElement('option');
+                option.value = username;
+                option.text = username;
+                dropdown.add(option);
+            });
+        })
+        .catch(error => console.error('Error fetching customer usernames for Form 1:', error));
+</script>
+<!-- JavaScript for Form 2 -->
+<script>
+    // Fetch data from get_customer_usernames.php using JavaScript
+    fetch('get_customer_usernames.php')
+        .then(response => response.json())
+        .then(data => {
+            // Populate the dropdown options for Form 2
+            const dropdown = document.getElementById('customer_username2');
 
+            data.forEach(username => {
+                const option = document.createElement('option');
+                option.value = username;
+                option.text = username;
+                dropdown.add(option);
+            });
+        })
+        .catch(error => console.error('Error fetching customer usernames for Form 2:', error));
+</script>
 <script>
     // JavaScript to handle form submission asynchronously
     document.addEventListener("DOMContentLoaded", function() {

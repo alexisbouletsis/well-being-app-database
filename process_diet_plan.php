@@ -4,7 +4,7 @@ include("db_connection.php");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
-    $customer_username = $_POST['customer_username'];
+    $customer_username = $_POST['customer_username1'];
     $plan_id = intval(microtime(true)/1000) + rand(); 
     
     $sql = "INSERT INTO plan (plan_id, start_date, end_date, customer_username) VALUES ('$plan_id', '$start_date', '$end_date', '$customer_username')";    
