@@ -197,12 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <li><a  href="#services">Services</a></li>
           
           <?php if (isset($_SESSION['username'])): ?>
-            <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="#">Activity Plan</a></li>
-              <li><a href="#">Diet Plan</a></li>
-            </ul>
-          </li>
+          <li><a href="plan.php">Plan</a></li>
           <li><a href="medication.php">Medication</a></li>
           <li><a href="biometrics.php">Biometrics</a></li>
           <li><a class="nav-link active" href="appointments.php">Appointments</a></li>

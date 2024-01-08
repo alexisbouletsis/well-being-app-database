@@ -111,12 +111,7 @@ if (isset($_SESSION['username']) && isset($_SESSION['login_type'])) {
           <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
           <li><a class="nav-link scrollto" href="#services">Services</a></li>
           <?php if (isset($_SESSION['username'])): ?>
-            <li class="dropdown"><a href="plan.php"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
-                <ul>
-                <li><a href="plan.php">Activity Plan</a></li>
-                <li><a href="plan.php">Diet Plan</a></li>
-                </ul>
-            </li>
+            <li><a href="plan.php">Plan</a></li>
             <li><a class="nav-link" href="medication.php">Medication</a></li>
             <li><a href="biometrics.php">Biometrics</a></li>
             <li><a href="appointments.php">Appointments</a></li>

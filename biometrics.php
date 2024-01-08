@@ -197,12 +197,7 @@ if (isset($_GET['customer_username']) && $_SESSION['login_type'] === 'employee')
             <ul>
             <li><a class="nav-link scrollto" href="index.php">Home</a></li>
             <li><a class="nav-link scrollto " href="index.php #services">Services</a></li>
-            <li class="dropdown"><a href="#"><span>Plan</span> <i class="bi bi-chevron-down"></i></a>
-                <ul>
-                <li><a href="#">Activity Plan</a></li>
-                <li><a href="#">Diet Plan</a></li>
-                </ul>
-            </li>
+            <li><a href="plan.php">Plan</a></li>
             <li><a class="nav-link " href="medication.php">Medication</a></li>
             <li><a class="nav-link active href="biometrics.php">Biometrics</a></li>
             <li><a href="appointments.php">Appointments</a></li>
