@@ -319,7 +319,7 @@ function fetchEmployeeFullName($conn, $username) {
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Customer Username</th> 
+                <th>Customer Name</th> 
                 <th>Medication Type</th>
                 <th>Medication Dosage</th>
                 <th>Medication Start Date</th>

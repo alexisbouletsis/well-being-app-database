@@ -304,7 +304,7 @@ function fetchCustomerFullName($conn, $username) {
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Customer Username</th> 
+                <th>Customer Name</th> 
                 <th>Height [m]</th>
                 <th>Weight [Kg]</th>
                 <th>Body Fat [%]</th>

@@ -261,7 +261,7 @@ function fetchCustomerFullName($conn, $username) {
 
                 <thead>
                 <tr>
-                    <th>Customer Username</th> 
+                    <th>Customer Name</th> 
                     <th>Appointment Type</th>
                     <th>Appointment Date</th>
                 </tr>
@@ -299,7 +299,7 @@ function fetchCustomerFullName($conn, $username) {
                     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
                     <div class="form-group">
-                        <label for="customer_username" style="color: #333;">Customer Username:</label>
+                        <label for="customer_username" style="color: #333;">Customer Name:</label>
                         <input type="text" class="form-control" id="customer_username" name="customer_username" required>
                     </div>
                     
