@@ -1,26 +1,29 @@
 <?php
-// Establish a connection to the MySQL database (replace with your credentials)
 include 'db_connection.php';
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch customer_usernames from the 'plan' table
-$sql = "SELECT DISTINCT customer_username FROM plan";
+$sql = "SELECT DISTINCT c.customer_username, c.name 
+        FROM plan p
+        JOIN customer c ON p.customer_username = c.customer_username";
+
 $result = $conn->query($sql);
 
-$customerUsernames = array();
+$customerData = array();
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $customerUsernames[] = $row['customer_username'];
+        $customerData[] = array(
+            'customer_username' => $row['customer_username'],
+            'name' => $row['name']
+        );
     }
 }
 
 $conn->close();
 
-// Return JSON-encoded array
-echo json_encode($customerUsernames);
+header('Content-Type: application/json');
+echo json_encode($customerData);
 ?>

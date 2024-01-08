@@ -133,11 +133,10 @@ if (isset($_GET['logout'])) {
                         <input type="date" class="form-control" id="datePicker">
                     </div>
 
-
-                        <div class="form-group">
+                    <div class="form-group">
                         <h4 style="color: #007bff;">Select a Customer</h4>
-                            <select class="form-control" id="customerDropdown"></select>
-                        </div>
+                        <select class="form-control" id="customerDropdown"></select>
+                    </div>
 
                         
                     <center>
@@ -161,12 +160,6 @@ if (isset($_GET['logout'])) {
                         <h4 style="color: #007bff;">Select a Date</h4>
                         <input type="date" class="form-control" id="datePicker">
                     </div>
-
-
-                        <!-- <div class="form-group">
-                        <h4 style="color: #007bff;">Select a Customer</h4>
-                            <select class="form-control" id="customerDropdown"></select>
-                        </div> -->
 
                         
                     <center>
@@ -227,16 +220,13 @@ if (isset($_GET['logout'])) {
                     <h4 style="color: #007bff;">Create Diet Plan</h4>
                     <form id="dietPlanForm" method="post" action="">
 
-                    <!-- <div class="form-group">
-                        <label for="customer_username" style="color: #333;">Customer:</label>
-                        <input type="text" class="form-control" id="customer_username" name="customer_username" required>
-                    </div> -->
                     <div class="form-group">
-                        <label for="customer_username1" style="color: #333;">Customer:</label>
-                        <select class="form-control" id="customer_username1" name="customer_username1" required>
-                            <!-- Options will be dynamically populated here -->
-                        </select>
-                    </div>
+                            <label for="customer_username1" style="color: #333;">Customer:</label>
+                            <select class="form-control" id="customer_username1" name="customer_username1" required>
+                                <!-- Options will be dynamically populated here -->
+                            </select>
+                        </div>
+
 
                     <div class="form-group">
                         <label for="start_date" style="color: #333;">Plan Start Date:</label>
@@ -316,13 +306,14 @@ if (isset($_GET['logout'])) {
 
                             <h4 style="color: #007bff;">Create Activity Plan</h4>
                             <form id="activityPlanForm" method="post" action="">
-
+                           
                             <div class="form-group">
                                 <label for="customer_username2" style="color: #333;">Customer:</label>
                                 <select class="form-control" id="customer_username2" name="customer_username2" required>
                                     <!-- Options will be dynamically populated here -->
                                 </select>
                             </div>
+
 
                             <div class="form-group">
                                 <label for="start_date" style="color: #333;">Plan Start Date:</label>
@@ -374,6 +365,26 @@ if (isset($_GET['logout'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
+    <script>
+    function populateCustomerDropdown() {
+        var customerDropdown = document.getElementById('customerDropdown');
+
+            // Fetch customer data from MySQL using PHP
+            fetch('get_customer_usernames.php')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(customer => {
+                        var option = document.createElement('option');
+                        option.value = customer.customer_username; // Use customer_username as the value
+                        option.text = customer.name; // Display customer names
+                        customerDropdown.add(option);
+                    });
+                });
+        }
+
+        // Call the function to populate the dropdown
+        populateCustomerDropdown();
+    </script>
 
     <!-- <div id="selectedValues">Selected Date: <span id="displayDate"></span>, Selected Customer: <span id="displayCustomer"></span></div> -->
 
@@ -383,22 +394,8 @@ if (isset($_GET['logout'])) {
             var selectedDate = document.getElementById('datePicker').value;
         }
 
-        // Function to populate the customer dropdown with values from MySQL
-        function populateCustomerDropdown() {
-            var customerDropdown = document.getElementById('customerDropdown');
 
-            // Fetch customer_usernames from MySQL using PHP
-            fetch('get_customer_usernames.php')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(customer => {
-                        var option = document.createElement('option');
-                        option.value = customer;
-                        option.text = customer;
-                        customerDropdown.add(option);
-                    });
-                });
-        }
+
 
         // Function to handle button click and fetch/display data from the database
         function storeAndPrintValues() {
@@ -518,10 +515,6 @@ if (isset($_GET['logout'])) {
         // Attach functions to events
         document.getElementById('datePicker').addEventListener('change', updateSelectedDate);
         window.addEventListener('DOMContentLoaded', updateSelectedDate);
-
-        // Attach functions to events
-        document.getElementById('datePicker').addEventListener('change', updateSelectedDate);
-        window.addEventListener('DOMContentLoaded', populateCustomerDropdown);
     </script>
 </main><!-- End #main -->
 
@@ -583,17 +576,17 @@ if (isset($_GET['logout'])) {
     fetch('get_customer_usernames.php')
         .then(response => response.json())
         .then(data => {
-            // Populate the dropdown options for Form 1
+            // Populate the dropdown options for Form 2
             const dropdown = document.getElementById('customer_username1');
 
-            data.forEach(username => {
+            data.forEach(customer => {
                 const option = document.createElement('option');
-                option.value = username;
-                option.text = username;
+                option.value = customer.customer_username;
+                option.text = customer.name; // Use the 'name' property for display
                 dropdown.add(option);
             });
         })
-        .catch(error => console.error('Error fetching customer usernames for Form 1:', error));
+        .catch(error => console.error('Error fetching customer data for Form 1:', error));
 </script>
 <!-- JavaScript for Form 2 -->
 <script>
@@ -604,14 +597,14 @@ if (isset($_GET['logout'])) {
             // Populate the dropdown options for Form 2
             const dropdown = document.getElementById('customer_username2');
 
-            data.forEach(username => {
+            data.forEach(customer => {
                 const option = document.createElement('option');
-                option.value = username;
-                option.text = username;
+                option.value = customer.customer_username;
+                option.text = customer.name; // Use the 'name' property for display
                 dropdown.add(option);
             });
         })
-        .catch(error => console.error('Error fetching customer usernames for Form 2:', error));
+        .catch(error => console.error('Error fetching customer data for Form 2:', error));
 </script>
 <script>
     // JavaScript to handle form submission asynchronously
