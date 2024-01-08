@@ -102,6 +102,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// Function to fetch employee's full name from the database
+function fetchEmployeeFullName($conn, $username) {
+    $sql = "SELECT name FROM employee WHERE employee_username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['name'];
+    } else {
+        return "No name found";
+    }
+}
+
+// Function to fetch customer's full name from the database
+function fetchCustomerFullName($conn, $username) {
+    $sql = "SELECT name FROM customer WHERE customer_username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['name'];
+    } else {
+        return "No name found";
+    }
+}
+
+
 
 ?>
 
@@ -237,13 +270,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php
                 /// Display data in the table
                 if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>" . $row["customer_username"] . "</td>
-                        <td>" . $row["appointment_type"] . "</td>
-                        <td>" . $row["appointment_date"] . "</td>
-                    </tr>";  
-                }
+                    while ($row = $result->fetch_assoc()) {
+                        $customer_username = $row["customer_username"];
+                        $employee_username = $row["employee_username"];
+                
+                        // Fetching full names
+                        $customer_name = fetchCustomerFullName($conn, $customer_username);
+                        $employee_name = fetchEmployeeFullName($conn, $employee_username);
+                
+                        echo "<tr>
+                                <td>" . $customer_name . "</td>
+                                <td>" . $row["appointment_type"] . "</td>
+                                <td>" . $row["appointment_date"] . "</td>
+                            </tr>";  
+                    }
                 } else {
                     echo "<tr><td colspan='3'>No data found</td></tr>";
                 }
@@ -302,11 +342,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             /// Display data in the table
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>" . $row["employee_username"] . "</td>
-                        <td>" . $row["appointment_type"] . "</td>
-                        <td>" . $row["appointment_date"] . "</td>
-                    </tr>";  
+                    $customer_username = $row["customer_username"];
+                    $employee_username = $row["employee_username"];
+            
+                    // Fetching full names
+                    $customer_name = fetchCustomerFullName($conn, $customer_username);
+                    $employee_name = fetchEmployeeFullName($conn, $employee_username);
+            
+                    echo "<tr>
+                            <td>" . $employee_name . "</td>
+                            <td>" . $row["appointment_type"] . "</td>
+                            <td>" . $row["appointment_date"] . "</td>
+                        </tr>";  
                 }
             } else {
                 echo "<tr><td colspan='3'>No data found</td></tr>";
