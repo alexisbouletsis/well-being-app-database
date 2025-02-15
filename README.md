@@ -1,7 +1,7 @@
 # Well-being App Database
 
 ## 📌 Overview
-The **Well-being App Database** is designed for **well-being companies** to help professionals like **nutritionists, trainers, and health experts**(employees) monitor client health. Employees can create **custom diet and exercise plans**, store them in the database, and make them available via the Well-being App. Clients can access their daily plans, track biometric data, and monitor progress for better health outcomes.
+The **Well-being App Database** is designed for **well-being companies** to help professionals like **nutritionists, trainers, and health experts** (employees) monitor client health. Employees can create **custom diet and exercise plans**, store them in the database, and make them available via the Well-being App. Clients can access their daily plans, track biometric data, and monitor progress for better health outcomes.
 
 ## 🎯 Why Well-being App Database?
 
