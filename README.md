@@ -1,31 +1,31 @@
 # Well-being App Database
 
 ## 📌 Overview
-**Well-being App Database** is a structured database designed for **well-being companies** that provide personalized fitness and nutrition services. The system helps **nutritionists, trainers, and health professionals** manage customized **meal plans, exercise schedules, and client progress tracking.**
+The **Well-being App Database** is designed for **well-being companies** to help professionals like **nutritionists, trainers, and health experts**(employees) monitor client health. Employees can create **custom diet and exercise plans**, store them in the database, and make them available via the Well-being App. Clients can access their daily plans, track biometric data, and monitor progress for better health outcomes.
 
 ## 🎯 Why Well-being App Database?
 
-Helps companies offer better **health & fitness services**
+- Helps companies offer better **health & fitness services**
 
-Provides **real-time progress tracking** for clients
+- Provides **real-time progress tracking** for clients
 
-Centralized **secure data storage**
+- Centralized **secure data storage**
 
-Allows **custom meal and workout planning**
+- Allows **custom meal and workout planning**
 
-Supports **medical tracking and appointments**
+- Supports **medical tracking and appointments**
 
 ## 🚀 Features
 
-**User Management:** Secure login for employees and clients
+- **User Management:** Secure login for employees and clients
 
-**Client Progress Tracking:** Record biometric data (weight, fat percentage, etc.)
+- **Client Progress Tracking:** Record biometric data (weight, fat percentage, etc.)
 
-**Personalized Plans:** Employees create custom diet and workout plans
+- **Personalized Plans:** Employees create custom diet and workout plans
 
-**Medical Data Integration:** Track prescribed medications
+- **Medical Data Integration:** Track prescribed medications
 
-**Appointments System:** Schedule and track consultation sessions
+- **Appointments System:** Schedule and track consultation sessions
 
 ## 🏗 Web App Screenshots
 ### Home Page
